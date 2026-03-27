@@ -19,7 +19,7 @@ function QuestionCard({ q, selected, setSelected, showResult }) {
     }}>
       {q.image && (
         <img
-          src={`http://localhost:5000/uploads/${q.image}`}
+          src={`https://mcq-urdu-system-v2.onrender.com/uploads/${q.image}`}
           alt="question"
           style={{
             width: "100%",

@@ -23,7 +23,7 @@ function AdminPage() {
   // 🔄 LOAD DATA
   const loadData = async () => {
     try {
-      const tradeRes = await axios.get("http://localhost:5000/api/trades");
+      const tradeRes = await axios.get("https://mcq-urdu-system-v2.onrender.com/api/trades");
       setTrades(tradeRes.data);
 
       const qByTrade = {};
@@ -31,7 +31,7 @@ function AdminPage() {
 
       for (let t of tradeRes.data) {
         const qRes = await axios.get(
-          "http://localhost:5000/api/questions/" + t._id
+          "https://mcq-urdu-system-v2.onrender.com/api/questions/" + t._id
         );
         qByTrade[t._id] = qRes.data;
         total += qRes.data.length;
@@ -52,7 +52,7 @@ function AdminPage() {
   // ✅ ADD TRADE
   const addTrade = async () => {
     if (!trade.trim()) return alert("ٹریڈ کا نام درج کریں");
-    await axios.post("http://localhost:5000/api/trades", { name: trade });
+    await axios.post("https://mcq-urdu-system-v2.onrender.com/api/trades", { name: trade });
     setTrade("");
     loadData();
   };
@@ -60,7 +60,7 @@ function AdminPage() {
   // ❌ DELETE TRADE
   const deleteTrade = async (id) => {
     if (!window.confirm("Delete this trade?")) return;
-    await axios.delete("http://localhost:5000/api/trades/" + id);
+    await axios.delete("https://mcq-urdu-system-v2.onrender.com/api/trades/" + id);
     loadData();
   };
 
@@ -86,14 +86,11 @@ function AdminPage() {
       if (image) formData.append("image", image);
 
       if (editingId) {
-        await axios.put(
-          "http://localhost:5000/api/questions/" + editingId,
-          formData
-        );
+        await axios.put("https://mcq-urdu-system-v2.onrender.com/api/questions/" + editingId, formData);
         alert("سوال اپڈیٹ ہو گیا");
       } else {
         await axios.post(
-          "http://localhost:5000/api/questions",
+          "https://mcq-urdu-system-v2.onrender.com/api/questions",
           formData
         );
         alert("سوال شامل ہو گیا");
@@ -124,7 +121,7 @@ function AdminPage() {
   // ❌ DELETE QUESTION
   const deleteQuestion = async (id) => {
     if (!window.confirm("Delete this question?")) return;
-    await axios.delete("http://localhost:5000/api/questions/" + id);
+    await axios.delete("https://mcq-urdu-system-v2.onrender.com/api/questions/" + id);
     loadData();
   };
 

@@ -8,7 +8,7 @@ function MenuPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/trades")
+    axios.get("https://mcq-urdu-system-v2.onrender.com/api/trades")
       .then(res => setTrades(res.data));
   }, []);
 
