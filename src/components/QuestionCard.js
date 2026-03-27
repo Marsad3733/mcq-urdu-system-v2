@@ -18,18 +18,18 @@ function QuestionCard({ q, selected, setSelected, showResult }) {
       direction: "rtl",
     }}>
       {q.image && (
-        <img
-          src={`https://mcq-urdu-system-v2.onrender.com/uploads/${q.image}`}
-          alt="question"
-          style={{
-            width: "100%",
-            maxHeight: "20vh",
-            objectFit: "contain",
-            borderRadius: "8px",
-            marginBottom: "0.5rem"
-          }}
-        />
-      )}
+  <img
+    src={q.image}
+    alt="question"
+    style={{
+      width: "100%",
+      maxHeight: "20vh",
+      objectFit: "contain",
+      borderRadius: "8px",
+      marginBottom: "0.5rem"
+    }}
+  />
+)}
 
       <div style={{ fontSize: "1rem", textAlign: "right", marginBottom: "0.5rem" }}>
         {q.question}

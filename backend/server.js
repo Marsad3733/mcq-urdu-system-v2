@@ -26,8 +26,7 @@ app.use("/api/settings", settingsRoutes);
 app.use("/api/questions", questionRoutes);
 app.use("/api/trades", tradeRoutes);
 
-// Static folder
-app.use("/uploads", express.static("uploads"));
+
 
 // ✅ IMPORTANT for deployment
 const PORT = process.env.PORT || 5000;

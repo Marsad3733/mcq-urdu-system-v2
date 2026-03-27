@@ -67,7 +67,13 @@ function TestPage() {
           return (
             <div key={i} style={{ background: "#222", padding: "15px", marginBottom: "15px", borderRadius: "10px" }}>
               <h3 style={{ textAlign: "right" }}>{i + 1}. {q.question}</h3>
-              {q.image && <img src={`https://mcq-urdu-system-v2.onrender.com/uploads/${q.image}`} alt="" style={{ maxWidth: "100%", margin: "10px 0" }}/>}
+              {q.image && (
+  <img
+    src={q.image}
+    alt=""
+    style={{ maxWidth: "100%", margin: "10px 0" }}
+  />
+)}
               {["A","B","C","D"].map(opt => {
                 let bg = "#333";
                 if (opt === correct) bg = "#2e7d32";

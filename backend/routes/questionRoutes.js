@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const Question = require("../models/Question");
+const cloudinary = require("../config/cloudinary");
 
-// 📁 STORAGE CONFIG
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+// ✅ CLOUDINARY STORAGE
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "mcq-questions",
+    allowed_formats: ["jpg", "png", "jpeg"]
   }
 });
 
@@ -28,7 +30,6 @@ router.get("/:tradeId", async (req, res) => {
 // ✅ ADD QUESTION
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-
     const cleanCorrect = req.body.correct?.toUpperCase()?.trim();
 
     const q = new Question({
@@ -38,11 +39,10 @@ router.post("/", upload.single("image"), async (req, res) => {
       optionB: req.body.optionB,
       optionC: req.body.optionC,
       optionD: req.body.optionD,
-
-      // ✅ FIXED (no mismatch now)
       correct: cleanCorrect,
 
-      image: req.file ? req.file.filename : ""
+      // ✅ Cloudinary URL (NOT filename)
+      image: req.file ? req.file.path : ""
     });
 
     const saved = await q.save();
@@ -57,7 +57,6 @@ router.post("/", upload.single("image"), async (req, res) => {
 // ✏️ UPDATE QUESTION
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
-
     const cleanCorrect = req.body.correct?.toUpperCase()?.trim();
 
     const updateData = {
@@ -70,9 +69,9 @@ router.put("/:id", upload.single("image"), async (req, res) => {
       correct: cleanCorrect
     };
 
-    // ✅ Only update image if new uploaded
+    // ✅ Update image if new one uploaded
     if (req.file) {
-      updateData.image = req.file.filename;
+      updateData.image = req.file.path;
     }
 
     const updated = await Question.findByIdAndUpdate(
