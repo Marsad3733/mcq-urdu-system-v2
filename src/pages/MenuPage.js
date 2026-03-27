@@ -9,7 +9,7 @@ function MenuPage() {
 
   // 🔐 CHECK LOGIN (FIXED dependency)
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("auth");
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
       navigate("/login");
     }

@@ -1,23 +1,25 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage({ onLogin }) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // 🔐 HARDCODED CREDENTIALS
   const FIXED_USER = "admin";
   const FIXED_PASS = "1234";
 
   const handleLogin = () => {
-    if (username === FIXED_USER && password === FIXED_PASS) {
-      localStorage.setItem("isLoggedIn", "true");
-      onLogin();
-    } else {
-      alert("غلط یوزرنیم یا پاسورڈ");
-    }
-  };
-
+  if (username === FIXED_USER && password === FIXED_PASS) {
+    localStorage.setItem("isLoggedIn", "true");
+    onLogin();
+    navigate("/"); // ✅ redirect
+  } else {
+    alert("غلط یوزرنیم یا پاسورڈ");
+  }
+};
   return (
     <div style={{
       height: "100vh",

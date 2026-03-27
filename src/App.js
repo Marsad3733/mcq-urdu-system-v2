@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import MenuPage from "./pages/MenuPage";
@@ -21,29 +21,41 @@ function App() {
     }
   }, []);
 
-  // 🔒 If not logged in → show login page only
-  if (!isLoggedIn) {
-    return <LoginPage onLogin={() => setIsLoggedIn(true)} />;
-  }
-
   return (
     <BrowserRouter>
       <div style={{ padding: "20px" }}>
+
         <Routes>
 
-          {/* Menu Page */}
-          <Route path="/" element={<MenuPage />} />
+          {/* 🔐 Login Route */}
+          <Route 
+            path="/login" 
+            element={<LoginPage onLogin={() => setIsLoggedIn(true)} />} 
+          />
 
-          {/* Test Page */}
-          <Route path="/test/:tradeId" element={<TestPage />} />
+          {/* 🔒 Protected Routes */}
+          <Route 
+            path="/" 
+            element={isLoggedIn ? <MenuPage /> : <Navigate to="/login" />} 
+          />
 
-          {/* Admin Page */}
-          <Route path="/admin" element={<AdminPage />} />
+          <Route 
+            path="/test/:tradeId" 
+            element={isLoggedIn ? <TestPage /> : <Navigate to="/login" />} 
+          />
 
-          {/* Result Page */}
-          <Route path="/result" element={<ResultPage />} />
+          <Route 
+            path="/admin" 
+            element={isLoggedIn ? <AdminPage /> : <Navigate to="/login" />} 
+          />
+
+          <Route 
+            path="/result" 
+            element={isLoggedIn ? <ResultPage /> : <Navigate to="/login" />} 
+          />
 
         </Routes>
+
       </div>
     </BrowserRouter>
   );
