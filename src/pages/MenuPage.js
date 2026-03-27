@@ -31,7 +31,7 @@ function MenuPage() {
   const handleAdminAccess = () => {
     const pass = prompt("Enter Admin Password:");
 
-    if (pass === "admin123") {
+    if (pass === "marsad0000") {
       localStorage.setItem("adminAuth", "true");
       navigate("/admin");
     } else if (pass !== null) {
