@@ -20,6 +20,22 @@ function AdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
+  // 🔐 ADMIN PASSWORD PROTECTION
+  useEffect(() => {
+    const isAdmin = localStorage.getItem("adminAuth");
+
+    if (!isAdmin) {
+      const pass = prompt("Enter Admin Password:");
+
+      if (pass === "admin123") {
+        localStorage.setItem("adminAuth", "true");
+      } else {
+        alert("Wrong password!");
+        navigate("/");
+      }
+    }
+  }, [navigate]);
+
   // 🔄 LOAD DATA
   const loadData = async () => {
     try {
@@ -49,6 +65,12 @@ function AdminPage() {
     loadData();
   }, []);
 
+  // 🚪 ADMIN LOGOUT
+  const adminLogout = () => {
+    localStorage.removeItem("adminAuth");
+    navigate("/");
+  };
+
   // ✅ ADD TRADE
   const addTrade = async () => {
     if (!trade.trim()) return alert("ٹریڈ کا نام درج کریں");
@@ -57,14 +79,12 @@ function AdminPage() {
     loadData();
   };
 
-  // ❌ DELETE TRADE
   const deleteTrade = async (id) => {
     if (!window.confirm("Delete this trade?")) return;
     await axios.delete("https://mcq-urdu-system-v2.onrender.com/api/trades/" + id);
     loadData();
   };
 
-  // ✅ ADD / UPDATE QUESTION
   const addQuestion = async () => {
     if (!tradeId) return alert("ٹریڈ منتخب کریں");
     if (!correct) return alert("Correct option لازمی ہے");
@@ -89,10 +109,7 @@ function AdminPage() {
         await axios.put("https://mcq-urdu-system-v2.onrender.com/api/questions/" + editingId, formData);
         alert("سوال اپڈیٹ ہو گیا");
       } else {
-        await axios.post(
-          "https://mcq-urdu-system-v2.onrender.com/api/questions",
-          formData
-        );
+        await axios.post("https://mcq-urdu-system-v2.onrender.com/api/questions", formData);
         alert("سوال شامل ہو گیا");
       }
 
@@ -105,7 +122,6 @@ function AdminPage() {
     }
   };
 
-  // ✏️ EDIT
   const editQuestion = (q) => {
     setEditingId(q._id);
     setTradeId(q.tradeId);
@@ -118,14 +134,12 @@ function AdminPage() {
     setImage(null);
   };
 
-  // ❌ DELETE QUESTION
   const deleteQuestion = async (id) => {
     if (!window.confirm("Delete this question?")) return;
     await axios.delete("https://mcq-urdu-system-v2.onrender.com/api/questions/" + id);
     loadData();
   };
 
-  // 🔄 RESET
   const resetForm = () => {
     setEditingId(null);
     setQuestion("");
@@ -140,27 +154,18 @@ function AdminPage() {
 
   return (
     <div style={containerStyle}>
-      {/* BACKWARD BUTTON ON OPPOSITE SIDE */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            fontSize: "1.5rem",
-            padding: "5px 12px",
-            borderRadius: "6px",
-            border: "none",
-            cursor: "pointer",
-            background: "#5f6fdc",
-            color: "white"
-          }}
-        >
-          ←
+
+      {/* TOP BAR */}
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
+        <button onClick={() => navigate("/")} style={backBtn}>←</button>
+
+        <button onClick={adminLogout} style={logoutBtn}>
+          Logout Admin
         </button>
       </div>
 
       <h1 style={{ textAlign: "center" }}>🛠 Admin Dashboard</h1>
 
-      {/* STATS */}
       <div style={statsWrapper}>
         <div style={cardStyle}>
           <h3>Total Trades</h3>
@@ -172,9 +177,8 @@ function AdminPage() {
         </div>
       </div>
 
-      {/* GRID */}
       <div style={gridStyle}>
-
+       
         {/* ADD TRADE */}
         <div style={boxStyle}>
           <h2>➕ نئی ٹریڈ</h2>
@@ -250,5 +254,23 @@ const listItem = { display:"flex", justifyContent:"space-between", background:"#
 const deleteBtn = { background:"red", color:"white", border:"none", padding:"5px 10px", marginLeft:"5px", borderRadius:"5px" };
 const editBtn = { background:"#2196f3", color:"white", border:"none", padding:"5px 10px", borderRadius:"5px" };
 const cancelBtn = { marginTop:"10px", width:"100%", padding:"10px", background:"#999", border:"none", color:"white", borderRadius:"6px" };
+const backBtn = {
+  fontSize: "1.5rem",
+  padding: "5px 12px",
+  borderRadius: "6px",
+  border: "none",
+  cursor: "pointer",
+  background: "#5f6fdc",
+  color: "white"
+};
+
+const logoutBtn = {
+  background: "black",
+  color: "white",
+  padding: "8px 15px",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer"
+};
 
 export default AdminPage;

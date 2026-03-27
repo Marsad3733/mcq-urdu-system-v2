@@ -7,20 +7,19 @@ function MenuPage() {
   const [trades, setTrades] = useState([]);
   const navigate = useNavigate();
 
-  // 🔐 CHECK LOGIN
+  // 🔐 CHECK LOGIN (FIXED dependency)
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("auth");
     if (!isLoggedIn) {
       navigate("/login");
     }
-  }, []);
+  }, [navigate]); // ✅ FIXED
 
   useEffect(() => {
     axios.get("https://mcq-urdu-system-v2.onrender.com/api/trades")
       .then(res => setTrades(res.data));
   }, []);
 
-  // 🚪 LOGOUT FUNCTION
   const handleLogout = () => {
     localStorage.removeItem("auth");
     navigate("/login");
@@ -34,54 +33,52 @@ function MenuPage() {
       color: "white"
     }}>
 
-      {/* Page Header */}
       <h1 style={{ textAlign: "center", marginTop: "20px" }}>
         Father And Sons
       </h1>
 
-      {/* Top Bar */}
       <div style={{
         display: "flex",
-        justifyContent: "space-between", // ✅ changed
+        justifyContent: "space-between",
         alignItems: "center",
         padding: "15px 30px",
         background: "rgba(255,255,255,0.1)",
         borderRadius: "10px",
         margin: "20px"
       }}>
-        
-        {/* Admin Button */}
-        <button
-          onClick={() => navigate("/admin")}
-          style={{
-            background: "#ff4d4d",
-            border: "none",
-            color: "white",
-            padding: "8px 18px",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: "bold"
-          }}
-        >
-          Admin
-        </button>
 
-        {/* 🚪 Logout Button */}
-        <button
-          onClick={handleLogout}
-          style={{
-            background: "#333",
-            border: "none",
-            color: "white",
-            padding: "8px 18px",
-            borderRadius: "8px",
-            cursor: "pointer",
-            fontWeight: "bold"
-          }}
-        >
+        {/* 🔐 SHOW ONLY IF ADMIN LOGGED */}
+        {localStorage.getItem("adminAuth") && (
+          <button
+            onClick={() => navigate("/admin")}
+            style={{
+              background: "#ff4d4d",
+              border: "none",
+              color: "white",
+              padding: "8px 18px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontWeight: "bold"
+            }}
+          >
+            Admin
+          </button>
+        )}
+
+        <button onClick={handleLogout} style={{
+          background: "#333",
+          border: "none",
+          color: "white",
+          padding: "8px 18px",
+          borderRadius: "8px",
+          cursor: "pointer",
+          fontWeight: "bold"
+        }}>
           Logout
         </button>
       </div>
+
+     
 
       {/* Welcome Section */}
       <div style={{
