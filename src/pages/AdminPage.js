@@ -20,21 +20,24 @@ function AdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
-  // 🔐 ADMIN PASSWORD PROTECTION
-  useEffect(() => {
-    const isAdmin = localStorage.getItem("adminAuth");
+  // 🔐 ADMIN PASSWORD PROTECTION (PASSWORD ONLY)
+useEffect(() => {
+  const isAdmin = localStorage.getItem("adminAuth");
 
-    if (!isAdmin) {
-      const pass = prompt("Enter Admin Password:");
+  if (!isAdmin) {
+    const password = prompt("Enter Admin Password:");
 
-      if (pass === "marsad123") {
-        localStorage.setItem("adminAuth", "true");
-      } else {
-        alert("Wrong password!");
-        navigate("/");
-      }
+    // 🔑 HARD CODED PASSWORD
+    const FIXED_PASS = "marsad123";
+
+    if (password === FIXED_PASS) {
+      localStorage.setItem("adminAuth", "true");
+    } else {
+      alert("Wrong password!");
+      navigate("/");
     }
-  }, [navigate]);
+  }
+}, [navigate]);
 
   // 🔄 LOAD DATA
   const loadData = async () => {
