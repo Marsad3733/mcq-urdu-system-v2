@@ -7,22 +7,36 @@ function MenuPage() {
   const [trades, setTrades] = useState([]);
   const navigate = useNavigate();
 
-  // 🔐 CHECK LOGIN (FIXED dependency)
+  // 🔐 CHECK LOGIN
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
       navigate("/login");
     }
-  }, [navigate]); // ✅ FIXED
+  }, [navigate]);
 
+  // 📡 LOAD TRADES
   useEffect(() => {
     axios.get("https://mcq-urdu-system-v2.onrender.com/api/trades")
       .then(res => setTrades(res.data));
   }, []);
 
+  // 🚪 USER LOGOUT
   const handleLogout = () => {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("isLoggedIn"); // ✅ FIXED
     navigate("/login");
+  };
+
+  // 🔐 ADMIN ACCESS
+  const handleAdminAccess = () => {
+    const pass = prompt("Enter Admin Password:");
+
+    if (pass === "admin123") {
+      localStorage.setItem("adminAuth", "true");
+      navigate("/admin");
+    } else if (pass !== null) {
+      alert("Wrong password!");
+    }
   };
 
   return (
@@ -37,6 +51,7 @@ function MenuPage() {
         Father And Sons
       </h1>
 
+      {/* TOP BAR */}
       <div style={{
         display: "flex",
         justifyContent: "space-between",
@@ -47,24 +62,23 @@ function MenuPage() {
         margin: "20px"
       }}>
 
-        {/* 🔐 SHOW ONLY IF ADMIN LOGGED */}
-        {localStorage.getItem("adminAuth") && (
-          <button
-            onClick={() => navigate("/admin")}
-            style={{
-              background: "#ff4d4d",
-              border: "none",
-              color: "white",
-              padding: "8px 18px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontWeight: "bold"
-            }}
-          >
-            Admin
-          </button>
-        )}
+        {/* 🔐 Admin Button */}
+        <button
+          onClick={handleAdminAccess}
+          style={{
+            background: "#ff4d4d",
+            border: "none",
+            color: "white",
+            padding: "8px 18px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
+          Admin
+        </button>
 
+        {/* 🚪 Logout */}
         <button onClick={handleLogout} style={{
           background: "#333",
           border: "none",
@@ -78,9 +92,7 @@ function MenuPage() {
         </button>
       </div>
 
-     
-
-      {/* Welcome Section */}
+      {/* Welcome */}
       <div style={{
         textAlign: "center",
         marginTop: "30px",
@@ -94,7 +106,7 @@ function MenuPage() {
         </p>
       </div>
 
-      {/* Cards Grid */}
+      {/* CARDS */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
@@ -118,7 +130,7 @@ function MenuPage() {
             onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             <div style={{ fontSize: "40px", marginBottom: "10px" }}>📋</div>
-            <h2 style={{ marginBottom: "10px" }}>{t.name}</h2>
+            <h2>{t.name}</h2>
 
             <div style={{
               background: "#eee",
@@ -131,22 +143,20 @@ function MenuPage() {
               سوالات: {t.questionCount || 0}
             </div>
 
-            <div>
-              <button
-                onClick={() => navigate("/test/" + t._id)}
-                style={{
-                  background: "linear-gradient(90deg, #5f6fdc, #7b4bb7)",
-                  border: "none",
-                  color: "white",
-                  padding: "10px 20px",
-                  borderRadius: "25px",
-                  cursor: "pointer",
-                  fontWeight: "bold"
-                }}
-              >
-                ٹیسٹ شروع کریں
-              </button>
-            </div>
+            <button
+              onClick={() => navigate("/test/" + t._id)}
+              style={{
+                background: "linear-gradient(90deg, #5f6fdc, #7b4bb7)",
+                border: "none",
+                color: "white",
+                padding: "10px 20px",
+                borderRadius: "25px",
+                cursor: "pointer",
+                fontWeight: "bold"
+              }}
+            >
+              ٹیسٹ شروع کریں
+            </button>
           </div>
         ))}
       </div>
