@@ -7,10 +7,24 @@ function MenuPage() {
   const [trades, setTrades] = useState([]);
   const navigate = useNavigate();
 
+  // 🔐 CHECK LOGIN
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("auth");
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, []);
+
   useEffect(() => {
     axios.get("https://mcq-urdu-system-v2.onrender.com/api/trades")
       .then(res => setTrades(res.data));
   }, []);
+
+  // 🚪 LOGOUT FUNCTION
+  const handleLogout = () => {
+    localStorage.removeItem("auth");
+    navigate("/login");
+  };
 
   return (
     <div style={{
@@ -28,13 +42,14 @@ function MenuPage() {
       {/* Top Bar */}
       <div style={{
         display: "flex",
-        justifyContent: "flex-start",
+        justifyContent: "space-between", // ✅ changed
         alignItems: "center",
         padding: "15px 30px",
         background: "rgba(255,255,255,0.1)",
         borderRadius: "10px",
         margin: "20px"
       }}>
+        
         {/* Admin Button */}
         <button
           onClick={() => navigate("/admin")}
@@ -49,6 +64,22 @@ function MenuPage() {
           }}
         >
           Admin
+        </button>
+
+        {/* 🚪 Logout Button */}
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "#333",
+            border: "none",
+            color: "white",
+            padding: "8px 18px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
+          Logout
         </button>
       </div>
 
@@ -91,6 +122,7 @@ function MenuPage() {
           >
             <div style={{ fontSize: "40px", marginBottom: "10px" }}>📋</div>
             <h2 style={{ marginBottom: "10px" }}>{t.name}</h2>
+
             <div style={{
               background: "#eee",
               display: "inline-block",
@@ -101,6 +133,7 @@ function MenuPage() {
             }}>
               سوالات: {t.questionCount || 0}
             </div>
+
             <div>
               <button
                 onClick={() => navigate("/test/" + t._id)}
