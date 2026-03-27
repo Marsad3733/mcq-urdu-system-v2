@@ -1,13 +1,75 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+
+  /* Urdu Font */
+  font-family: 'Noto Nastaliq Urdu', serif;
+
+  /* Urdu Layout */
+  direction: rtl;
+  text-align: right;
+
+  background-color: #f5f5f5;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Code Font (no change needed) */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Buttons styling */
+button{
+  padding:10px 20px;
+  margin:10px;
+  background:#6c63ff;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:16px;
+}
+
+/* Button hover effect */
+button:hover{
+  background:#574fd6;
+}
+
+/* Input styling */
+input{
+  padding:10px;
+  margin:10px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+
+/* Question card layout */
+.question-container{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-top:20px;
+}
+
+/* Question image */
+.question-image{
+  width:200px;
+}
+
+/* Question text */
+.question-text{
+  font-size:20px;
+}
+
+/* Navigation buttons (question numbers) */
+.nav-buttons{
+  margin-top:20px;
+}
+
+.nav-buttons button{
+  width:40px;
+  height:40px;
+  margin:5px;
 }
