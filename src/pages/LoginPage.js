@@ -8,8 +8,8 @@ function LoginPage({ onLogin }) {
   const navigate = useNavigate();
 
   // 🔐 HARDCODED CREDENTIALS
-  const FIXED_USER = "admin";
-  const FIXED_PASS = "1234";
+  const FIXED_USER = "marsad";
+  const FIXED_PASS = "123";
 
   const handleLogin = () => {
   if (username === FIXED_USER && password === FIXED_PASS) {

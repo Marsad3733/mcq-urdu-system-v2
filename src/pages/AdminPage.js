@@ -27,7 +27,7 @@ function AdminPage() {
     if (!isAdmin) {
       const pass = prompt("Enter Admin Password:");
 
-      if (pass === "admin123") {
+      if (pass === "marsad123") {
         localStorage.setItem("adminAuth", "true");
       } else {
         alert("Wrong password!");
