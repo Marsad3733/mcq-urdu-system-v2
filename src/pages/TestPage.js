@@ -6,6 +6,7 @@ import QuestionCard from "../components/QuestionCard";
 function TestPage() {
   const { tradeId } = useParams();
   const navigate = useNavigate();
+
   const [questions, setQuestions] = useState([]);
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -29,7 +30,7 @@ function TestPage() {
   const formatTime = () => {
     const min = Math.floor(timeLeft / 60);
     const sec = timeLeft % 60;
-    return `${min}:${sec.toString().padStart(2,"0")}`;
+    return `${min}:${sec.toString().padStart(2, "0")}`;
   };
 
   if (questions.length === 0)
@@ -49,247 +50,194 @@ function TestPage() {
     return score;
   };
 
-  /* ================= RESULT PAGE ================= */
+  const progress = ((index + 1) / questions.length) * 100;
+
+  // ================= RESULT PAGE =================
   if (showResult || timeLeft === 0) {
     const score = calculateResult();
-    const percentage = Math.round((score / questions.length) * 100);
 
     return (
       <div style={{
         minHeight: "100vh",
         background: "linear-gradient(135deg,#0f2027,#203a43,#2c5364)",
-        padding: "25px",
-        color: "#fff"
+        color: "#fff",
+        padding: "20px"
       }}>
-
-        {/* TOP BAR */}
-        <div style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px"
-        }}>
-          <button onClick={() => navigate("/")} style={{
-            background: "#0f7a5e",
-            color: "#fff",
-            padding: "10px 18px",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer"
-          }}>
-            🏠 ہوم
-          </button>
-
-          <button onClick={() => window.location.reload()} style={{
-            background: "#2196f3",
-            color: "#fff",
-            padding: "10px 18px",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer"
-          }}>
-            🔄 دوبارہ کوشش
-          </button>
+        
+        {/* Top */}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h2>📊 نتیجہ</h2>
+          <button onClick={() => navigate("/")} style={backBtn}>←</button>
         </div>
 
-        {/* SCORE CARD */}
+        {/* Score Card */}
         <div style={{
-          background: "#ffffff",
-          color: "#333",
-          padding: "25px",
-          borderRadius: "15px",
           textAlign: "center",
-          marginBottom: "25px",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.3)"
+          margin: "20px 0",
+          padding: "20px",
+          borderRadius: "12px",
+          background: "#ffffff10",
+          backdropFilter: "blur(8px)"
         }}>
-          <h1 style={{ marginBottom: "10px" }}>🎯 نتیجہ</h1>
-
-          <h2>{score} / {questions.length}</h2>
-
-          <h3 style={{
-            color: percentage >= 50 ? "#2e7d32" : "#c62828",
-            marginTop: "10px"
-          }}>
-            {percentage}% اسکور
-          </h3>
-
-          {/* PROGRESS BAR */}
-          <div style={{
-            marginTop: "20px",
-            width: "100%",
-            height: "18px",
-            background: "#eee",
-            borderRadius: "10px",
-            overflow: "hidden"
-          }}>
-            <div style={{
-              width: `${percentage}%`,
-              height: "100%",
-              background: percentage >= 50 ? "#4caf50" : "#f44336",
-              transition: "width 0.5s ease"
-            }} />
-          </div>
+          <h1 style={{ fontSize: "3rem" }}>{score}/{questions.length}</h1>
+          <p>آپ کا اسکور</p>
         </div>
 
-        {/* QUESTIONS REVIEW */}
-        {questions.map((q, i) => {
-          const userAns = answers[i];
-          const correct = q.correct;
+        {/* Questions Review */}
+        <div style={{ maxHeight: "65vh", overflowY: "auto", paddingRight: "5px" }}>
+          {questions.map((q, i) => {
+            const userAns = answers[i];
+            const correct = q.correct;
 
-          return (
-            <div key={i} style={{
-              background: "#fff",
-              color: "#333",
-              padding: "20px",
-              marginBottom: "20px",
-              borderRadius: "12px",
-              boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
-              direction: "rtl"
-            }}>
-              <h3 style={{ marginBottom: "10px" }}>
-                {i + 1}. {q.question}
-              </h3>
-
-              {q.image && (
-                <img
-                  src={q.image}
-                  alt=""
-                  style={{
-                    maxWidth: "100%",
-                    margin: "10px 0",
-                    borderRadius: "8px"
-                  }}
-                />
-              )}
-
-              {["A","B","C","D"].map(opt => {
-                let bg = "#f5f5f5";
-                let border = "#ccc";
-
-                if (opt === correct) {
-                  bg = "#c8e6c9";
-                  border = "#2e7d32";
-                } else if (opt === userAns && opt !== correct) {
-                  bg = "#ffcdd2";
-                  border = "#c62828";
-                }
-
-                return (
-                  <div key={opt} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginTop: "8px"
-                  }}>
-                    {/* Option letter */}
-                    <div style={{
-                      width: "30px",
-                      textAlign: "center",
-                      fontWeight: "bold"
-                    }}>
-                      {opt}
-                    </div>
-
-                    {/* Option text */}
-                    <div style={{
-                      flex: 1,
-                      background: bg,
-                      border: "2px solid",
-                      borderColor: border,
-                      padding: "10px",
-                      borderRadius: "6px"
-                    }}>
-                      {q["option" + opt]}
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* STATUS */}
-              <div style={{
-                marginTop: "10px",
-                fontWeight: "bold",
-                color: userAns === correct ? "#2e7d32" : "#c62828"
+            return (
+              <div key={i} style={{
+                background: "#ffffff15",
+                marginBottom: "15px",
+                padding: "15px",
+                borderRadius: "10px"
               }}>
-                {userAns === correct ? "✔ درست" : "✘ غلط"}
+                <h3 style={{ textAlign: "right" }}>
+                  {i + 1}. {q.question}
+                </h3>
+
+                {["A", "B", "C", "D"].map(opt => {
+                  let bg = "#333";
+                  if (opt === correct) bg = "#2e7d32";
+                  else if (opt === userAns && opt !== correct) bg = "#c62828";
+
+                  return (
+                    <div key={opt} style={{
+                      background: bg,
+                      padding: "8px",
+                      marginTop: "6px",
+                      borderRadius: "6px",
+                      display: "flex",
+                      justifyContent: "space-between"
+                    }}>
+                      <span>{opt}</span>
+                      <span>{q["option" + opt]}</span>
+                    </div>
+                  );
+                })}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     );
   }
 
-  /* ================= TEST PAGE ================= */
-
+  // ================= TEST PAGE =================
   return (
     <div style={{
       fontFamily: "sans-serif",
       height: "100vh",
       display: "flex",
-      flexDirection: "column"
+      flexDirection: "column",
+      overflow: "hidden"
     }}>
 
-      {/* Top Bar */}
+      {/* TOP BAR */}
       <div style={{
-        display: "flex",
-        alignItems: "center",
         background: "#044d40",
         color: "#fff",
-        padding: "12px 25px",
-        justifyContent: "space-between"
+        padding: "10px 20px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px"
       }}>
-        <button onClick={() => setShowResult(true)} style={{
-          background: "#0f7a5e",
-          color: "#fff",
-          padding: "8px 16px",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer"
+
+        {/* Row 1 */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
         }}>
-          سیکشن مکمل کریں
-        </button>
+          <button onClick={() => setShowResult(true)} style={topBtn}>
+            سیکشن مکمل کریں
+          </button>
 
-        <div>⏱ {formatTime()}</div>
+          <div>⏱ {formatTime()}</div>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <div>سوال: {index + 1}</div>
-          <button onClick={() => navigate("/")} style={{
-            background: "#0f7a5e",
-            color: "#fff",
-            padding: "6px 12px",
-            border: "none",
-            borderRadius: "6px"
-          }}>←</button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <div>سوال {index + 1}</div>
+            <button onClick={() => navigate("/")} style={topBtn}>←</button>
+          </div>
+        </div>
+
+        {/* PROGRESS BAR */}
+        <div style={{
+          width: "100%",
+          height: "6px",
+          background: "#ffffff40",
+          borderRadius: "10px",
+          overflow: "hidden"
+        }}>
+          <div style={{
+            width: `${progress}%`,
+            height: "100%",
+            background: "#00e676",
+            transition: "0.3s"
+          }} />
         </div>
       </div>
 
-      {/* Main */}
-      <div style={{ display: "flex", flex: 1 }}>
-        <div style={{ flex: 1, padding: "12px" }}>
-          <QuestionCard
-            q={q}
-            selected={answers[index]}
-            setSelected={selectOption}
-            showResult={false}
-          />
+      {/* MAIN */}
+      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
 
-          <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-            <button onClick={() => setIndex(index+1)} disabled={index===questions.length-1}>
-              اگلا
+        {/* QUESTION AREA */}
+        <div style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "10px",
+          overflow: "hidden"
+        }}>
+          
+          {/* QUESTION */}
+          <div style={{ flex: 1, overflow: "hidden" }}>
+            <QuestionCard
+              q={q}
+              selected={answers[index]}
+              setSelected={selectOption}
+              showResult={false}
+            />
+          </div>
+
+          {/* BUTTONS (ALWAYS VISIBLE) */}
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "8px"
+          }}>
+            <button
+              onClick={() => setIndex(index - 1)}
+              disabled={index === 0}
+              style={navBtn}
+            >
+              واپس
             </button>
 
-            <button onClick={() => setIndex(index-1)} disabled={index===0}>
-              واپس
+            <button
+              onClick={() => setIndex(index + 1)}
+              disabled={index === questions.length - 1}
+              style={navBtn}
+            >
+              اگلا
             </button>
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* SIDEBAR */}
         <div style={{
           width: "55px",
           background: "#065a46",
+          padding: "5px",
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
+          gap: "5px",
+          overflowY: "auto"
         }}>
           {questions.map((_, i) => {
             let bg = "#007a5e";
@@ -297,17 +245,16 @@ function TestPage() {
             else if (answers[i]) bg = "#2e7d32";
 
             return (
-              <div
-                key={i}
+              <div key={i}
                 onClick={() => setIndex(i)}
                 style={{
                   background: bg,
                   color: "#fff",
                   textAlign: "center",
-                  padding: "6px",
-                  cursor: "pointer"
-                }}
-              >
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  padding: "5px 0"
+                }}>
                 {i + 1}
               </div>
             );
@@ -317,5 +264,33 @@ function TestPage() {
     </div>
   );
 }
+
+/* STYLES */
+const navBtn = {
+  background: "#0f7a5e",
+  color: "#fff",
+  padding: "10px 18px",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer"
+};
+
+const topBtn = {
+  background: "#0f7a5e",
+  color: "#fff",
+  padding: "6px 12px",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer"
+};
+
+const backBtn = {
+  background: "#0f7a5e",
+  color: "#fff",
+  padding: "8px 14px",
+  border: "none",
+  borderRadius: "6px",
+  cursor: "pointer"
+};
 
 export default TestPage;
