@@ -1,4 +1,4 @@
-function QuestionCard({ q, selected, setSelected, showResult }) {
+function QuestionCard({ q, selected, setSelected, showResult }) { 
   if (!q) return <h3>سوال لوڈ ہو رہا ہے...</h3>;
 
   const options = ["A", "B", "C", "D"];
@@ -62,18 +62,8 @@ function QuestionCard({ q, selected, setSelected, showResult }) {
               cursor: showResult ? "default" : "pointer"
             }}
           >
-            
-            {/* LEFT SIDE (A/B/C/D outside box) */}
-            <div style={{
-              minWidth: "25px",
-              textAlign: "center",
-              fontWeight: "bold",
-              color: "#333"
-            }}>
-              {opt}
-            </div>
 
-            {/* OPTION BOX */}
+            {/* OPTION BOX (LEFT SIDE) */}
             <div style={{
               flex: 1,
               background: bg,
@@ -86,6 +76,16 @@ function QuestionCard({ q, selected, setSelected, showResult }) {
               transition: "background 0.2s ease"
             }}>
               {q["option" + opt]}
+            </div>
+
+            {/* RIGHT SIDE (A/B/C/D outside box) */}
+            <div style={{
+              minWidth: "25px",
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#333"
+            }}>
+              {opt}
             </div>
 
           </div>
