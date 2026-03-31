@@ -206,12 +206,13 @@ function TestPage() {
           </div>
 
           {/* BUTTONS (ALWAYS VISIBLE) */}
-          <div style={{
+         <div style={{
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "flex-start",
+  gap: "10px",
   marginTop: "8px"
 }}>
-  {/* اگلا - LEFT */}
+  {/* اگلا */}
   <button
     onClick={() => setIndex(index + 1)}
     disabled={index === questions.length - 1}
@@ -220,7 +221,7 @@ function TestPage() {
     اگلا
   </button>
 
-  {/* واپس - RIGHT */}
+  {/* واپس */}
   <button
     onClick={() => setIndex(index - 1)}
     disabled={index === 0}
