@@ -207,26 +207,28 @@ function TestPage() {
 
           {/* BUTTONS (ALWAYS VISIBLE) */}
           <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "8px"
-          }}>
-            <button
-              onClick={() => setIndex(index - 1)}
-              disabled={index === 0}
-              style={navBtn}
-            >
-              واپس
-            </button>
+  display: "flex",
+  justifyContent: "space-between",
+  marginTop: "8px"
+}}>
+  {/* اگلا - LEFT */}
+  <button
+    onClick={() => setIndex(index + 1)}
+    disabled={index === questions.length - 1}
+    style={navBtn}
+  >
+    اگلا
+  </button>
 
-            <button
-              onClick={() => setIndex(index + 1)}
-              disabled={index === questions.length - 1}
-              style={navBtn}
-            >
-              اگلا
-            </button>
-          </div>
+  {/* واپس - RIGHT */}
+  <button
+    onClick={() => setIndex(index - 1)}
+    disabled={index === 0}
+    style={navBtn}
+  >
+    واپس
+  </button>
+</div>
         </div>
 
         {/* SIDEBAR */}
