@@ -17,19 +17,20 @@ function QuestionCard({ q, selected, setSelected, showResult }) {
       border: "1px solid #999",
       direction: "rtl",
     }}>
+      
       {q.image && (
-  <img
-    src={q.image}
-    alt="question"
-    style={{
-      width: "100%",
-      maxHeight: "20vh",
-      objectFit: "contain",
-      borderRadius: "8px",
-      marginBottom: "0.5rem"
-    }}
-  />
-)}
+        <img
+          src={q.image}
+          alt="question"
+          style={{
+            width: "100%",
+            maxHeight: "20vh",
+            objectFit: "contain",
+            borderRadius: "8px",
+            marginBottom: "0.5rem"
+          }}
+        />
+      )}
 
       <div style={{ fontSize: "1rem", textAlign: "right", marginBottom: "0.5rem" }}>
         {q.question}
@@ -42,33 +43,51 @@ function QuestionCard({ q, selected, setSelected, showResult }) {
         let bg = "#fff";
         let border = "#333";
 
-        // Set background and border colors
         if (showResult) {
-          if (isCorrect) { bg = "#c8e6c9"; border = "#2e7d32"; }  // correct answer green
-          else if (isSelected) { bg = "#ffcdd2"; border = "#c62828"; }  // wrong selection red
-        } else if (isSelected) { bg = "#ffe082"; border = "#ff9800"; }  // selection yellow
-        else { bg = "#fff"; border = "#333"; }
+          if (isCorrect) { bg = "#c8e6c9"; border = "#2e7d32"; }
+          else if (isSelected) { bg = "#ffcdd2"; border = "#c62828"; }
+        } else if (isSelected) { 
+          bg = "#ffe082"; 
+          border = "#ff9800"; 
+        }
 
         return (
           <div
             key={opt}
             onClick={() => !showResult && setSelected(opt)}
             style={{
-              background: bg, // <-- fix: set the background here
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              cursor: showResult ? "default" : "pointer"
+            }}
+          >
+            
+            {/* LEFT SIDE (A/B/C/D outside box) */}
+            <div style={{
+              minWidth: "25px",
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#333"
+            }}>
+              {opt}
+            </div>
+
+            {/* OPTION BOX */}
+            <div style={{
+              flex: 1,
+              background: bg,
               border: "2px solid",
               borderColor: border,
               borderRadius: "6px",
               padding: "0.6rem 1rem",
-              cursor: showResult ? "default" : "pointer",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              textAlign: "right",
               fontSize: "1rem",
-              transition: "background 0.2s ease" // smooth color change
-            }}
-          >
-            <span>{opt}</span>
-            <span>{q["option" + opt]}</span>
+              transition: "background 0.2s ease"
+            }}>
+              {q["option" + opt]}
+            </div>
+
           </div>
         );
       })}
